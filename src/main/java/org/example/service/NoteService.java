@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public interface NoteService {
-    void help();
+    void getAllCommands();
 
-    Note noteNew();
+    Note createNewNote();
 
-    List<Note> noteList();
+    List<Note> getAllNotes();
 
-    void noteRemove();
+    void removeNoteById();
 
-    void noteExport();
+    void exportNotesToFile();
 
     void exit(Scanner scanner);
 }

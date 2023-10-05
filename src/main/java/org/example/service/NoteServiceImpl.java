@@ -13,28 +13,28 @@ public class NoteServiceImpl implements NoteService {
     private final NoteDao noteDao = new NoteDaoImpl();
 
     @Override
-    public void help() {
-        noteDao.help();
+    public void getAllCommands() {
+        noteDao.getAllCommands();
     }
 
     @Override
-    public Note noteNew() {
-        return noteDao.noteNew();
+    public Note createNewNote() {
+        return noteDao.createNewNote();
     }
 
     @Override
-    public List<Note> noteList() {
-        return noteDao.noteList();
+    public List<Note> getAllNotes() {
+        return noteDao.getAllNotes();
     }
 
     @Override
-    public void noteRemove() {
-        noteDao.noteRemove();
+    public void removeNoteById() {
+        noteDao.removeNoteById();
     }
 
     @Override
-    public void noteExport() {
-        noteDao.noteExport();
+    public void exportNotesToFile() {
+        noteDao.exportNotesToFile();
     }
 
     @Override
@@ -43,17 +43,17 @@ public class NoteServiceImpl implements NoteService {
     }
 
     public void start() {
-        System.out.println("Это Ваша записная книжка. Вот список доступных команд:\nhelp\nnote-new\nnote-list\nnote-remove\nnote-export\nexit");
+        log.info("Это Ваша записная книжка. Вот список доступных команд:\nhelp\nnote-new\nnote-list\nnote-remove\nnote-export\nexit");
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNext()) {
             String command = scanner.nextLine();
             switch (command) {
-                case "help" -> help();
+                case "help" -> getAllCommands();
                 case "exit" -> exit(scanner);
-                case "note-new" -> noteNew();
-                case "note-list" -> noteList();
-                case "note-remove" -> noteRemove();
-                case "note-export" -> noteExport();
+                case "note-new" -> createNewNote();
+                case "note-list" -> getAllNotes();
+                case "note-remove" -> removeNoteById();
+                case "note-export" -> exportNotesToFile();
                 default ->
                         log.warning("Несуществующая команда\nИспользуйте команду help для получения доступных команд");
             }

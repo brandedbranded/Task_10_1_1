@@ -12,26 +12,26 @@ import java.util.*;
 @Log
 public class NoteDaoImpl implements NoteDao {
     @Override
-    public void help() {
+    public void getAllCommands() {
         log.info("Вызвана команда help");
-        System.out.println("Список доступных комманд: \n help - все доступные команды \n note-new - создать новую заметку \n note-list - вывести весь список заметок \n note-remove - удалить заметку \n note-export - поместить все заметки в текстовый файл \n exit - завершить работу приложения");
+        log.info("Список доступных комманд: \n help - все доступные команды \n note-new - создать новую заметку \n note-list - вывести весь список заметок \n note-remove - удалить заметку \n note-export - поместить все заметки в текстовый файл \n exit - завершить работу приложения");
     }
 
 
     @Override
-    public Note noteNew() {
+    public Note createNewNote() {
         log.info("Вызвана команда note-new");
         Note newNote = null;
         List<String> noteLabelsList;
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Введите заметку");
+        log.info("Введите заметку");
         String noteText = scanner.nextLine();
         try {
             if (noteText.length() < 3) {
                 log.info("Текст заметки должен содержать более 3х символов. Введено: " + noteText);
                 throw new NoSuchElementException("Текст заметки должен содержать более 3х символов. Введено: " + noteText);
             }
-            System.out.println("Добавить метки?");
+            log.info("Добавить метки?");
             String labelslabels = scanner.nextLine();
             noteLabelsList = List.of(labelslabels.toUpperCase().split(" "));
             List<String> filteredLabels = new ArrayList<>();
@@ -53,13 +53,13 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public List<Note> noteList() {
+    public List<Note> getAllNotes() {
         log.info("Вызвана команда note-list");
         Scanner scanner = new Scanner(System.in);
         List<String> labels;
         List<Note> filteredNotes = new ArrayList<>();
         String ll;
-        System.out.println("Введите метки, чтобы отобразить определенные заметки или оставьте пустым для отображения всех заметок");
+        log.info("Введите метки, чтобы отобразить определенные заметки или оставьте пустым для отображения всех заметок");
         try {
             ll = scanner.nextLine();
             if (!ll.isEmpty()) {
@@ -97,10 +97,10 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public void noteRemove() {
+    public void removeNoteById() {
         log.info("Вызвана команда note-remove");
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Введите id удаляемой заметки");
+        log.info("Введите id удаляемой заметки");
         int id;
         String ids = scanner.nextLine();
         String regex = "^\\d*";
@@ -136,7 +136,7 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public void noteExport() {
+    public void exportNotesToFile() {
         log.info("Вызвана команда note-export");
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy_HH-mm-ss");
         String nameOfFile = "notes" + dateFormat.format(new Date()) + ".txt";

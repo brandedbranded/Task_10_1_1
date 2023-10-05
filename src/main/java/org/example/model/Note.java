@@ -8,7 +8,6 @@ import java.util.List;
 
 
 @Data
-@Getter
 public class Note {
     private static int res = 0;
     @Getter

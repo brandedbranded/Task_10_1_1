@@ -25,42 +25,42 @@ public class NotebookTest {
 
     @DisplayName("Уникальность генерируемых id")
     @Test
-    public void idGeneratorUnique() {
+    public void generateUniqueId() {
         input = "Text\nlabel";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
-        newNote = noteService.noteNew();
+        newNote = noteService.createNewNote();
 
         String input2 = "Texttext\nlabel label";
         InputStream inputStream2 = new ByteArrayInputStream(input2.getBytes());
         System.setIn(inputStream2);
-        Note newnote2 = noteService.noteNew();
+        Note newnote2 = noteService.createNewNote();
 
         assertNotEquals(newNote.getId(), newnote2.getId());
     }
 
     @DisplayName("Создание записки с некорректным текстом")
     @Test
-    public void badNoteText() {
+    public void createNote_invalidText_throwsException() {
         input = "Oh\nlabel";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         Whitebox.setInternalState(Note.class, "noteList", mockNoteList);
-        newNote = noteService.noteNew();
+        newNote = noteService.createNewNote();
 
-        assertThrows(NoSuchElementException.class, noteService::noteNew);
+        assertThrows(NoSuchElementException.class, noteService::createNewNote);
         assertEquals(0, mockNoteList.size());
         assertNull(newNote);
     }
 
     @DisplayName("Создание записки с корректным текстом")
     @Test
-    public void goodNoteText() {
+    public void createNote_validText_addNoteToList() {
         input = "Oh no, my hand\nlabel";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         Whitebox.setInternalState(Note.class, "noteList", mockNoteList);
-        newNote = noteService.noteNew();
+        newNote = noteService.createNewNote();
 
         assertEquals(1, mockNoteList.size());
         assertEquals("Oh no, my hand", newNote.getText());
@@ -68,12 +68,12 @@ public class NotebookTest {
 
     @DisplayName("Создание записки с некорректной меткой")
     @Test
-    public void badNoteLabel() {
+    public void createNote_invalidLabel_noteEqualsNull() {
         input = "Oh no, my hand\nметка пипетка";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         Whitebox.setInternalState(Note.class, "noteList", mockNoteList);
-        newNote = noteService.noteNew();
+        newNote = noteService.createNewNote();
 
         assertEquals(0, mockNoteList.size());
         assertNull(newNote);
@@ -81,12 +81,12 @@ public class NotebookTest {
 
     @DisplayName("Создание записки с корректной меткой")
     @Test
-    public void goodNoteLabel() {
+    public void createNote_validLabel_addNoteToList() {
         input = "Oh no, my hand\ntag";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         Whitebox.setInternalState(Note.class, "noteList", mockNoteList);
-        newNote = noteService.noteNew();
+        newNote = noteService.createNewNote();
 
         assertFalse(mockNoteList.isEmpty());
         assertEquals(List.of("TAG"), newNote.getLabel());
@@ -94,25 +94,25 @@ public class NotebookTest {
 
     @DisplayName("Удаление записки с некорректным id")
     @Test
-    public void badIdWhenRemove() {
+    public void removeNote_invalidId_throwsException() {
         String id = "айди";
         InputStream inputStream = new ByteArrayInputStream(id.getBytes());
         System.setIn(inputStream);
-        noteService.noteRemove();
-        assertThrows(NoSuchElementException.class, noteService::noteRemove);
+        noteService.removeNoteById();
+        assertThrows(NoSuchElementException.class, noteService::removeNoteById);
     }
 
     @DisplayName("Удаление записки с корректным id")
     @Test
-    public void goodIdWhenRemove() {
+    public void removeNote_validId_removeNoteFromList() {
         input = "Oh no, my hand\ntag";
         inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         Whitebox.setInternalState(Note.class, "noteList", mockNoteList);
-        newNote = noteService.noteNew();
+        newNote = noteService.createNewNote();
         InputStream is = new ByteArrayInputStream(String.valueOf(newNote.getId()).getBytes());
         System.setIn(is);
-        noteService.noteRemove();
+        noteService.removeNoteById();
 
         assertTrue(mockNoteList.isEmpty());
     }
